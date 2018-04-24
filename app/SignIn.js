@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, KeyboardAvoidingView} from 'react-native';
-import {Container, Content, Text, Item, Form, Input, Icon, Button} from 'native-base';
+import {Container, Content, Text, Item, Form, Input, Icon, Button, Header} from 'native-base';
+import axios from 'axios'
 
+const uri = 'https://api.backendless.com/88269424-FF0F-6299-FFAD-98ED78564100/E87E9DE8-BEB5-B6A8-FF2F-758B1D210D00/data'
 
-
-export default class FormLogin extends Component{
+export default class SignIn extends Component{
 
     state ={
         Username:'',
@@ -33,12 +34,30 @@ export default class FormLogin extends Component{
         }
     }
 
+    getUser(){
+        axios.get(`${uri}/Users`).then(result=>{
+            dataUser: result.data
+        })
+    }
+
+    handeLogin(){
+        axios.post(`${uri}/Users`, this.state.dataUser).then(result=>{
+            if(result.data){
+                this.getUser,
+                this.props.navigation.navigate('SignIn')
+            }else{
+                alert("Gagal")
+            }
+        })
+    }
+
     render(){
         return(
             <Container>
+                <Header androidStatusBarColor="#B4424B" />
                 <Content>
                     <View style={styles.row}>
-                        <Image source={require('./../images/logo.png')} style={styles.logo}/>
+                        <Image source={require('../assets/images/logo.png')} style={styles.logo}/>
                     </View>
                     <KeyboardAvoidingView>
                         <Form style={styles.input}>
@@ -47,14 +66,9 @@ export default class FormLogin extends Component{
                                 <Input 
                                     placeholder="Username"
                                     onSubmitEditing={()=>this.passwordInput.focus()}
-                                    onChangeText=
-                                        {
-                                            (text)=>this.validateUsername(text)?
-                                            this.setState({validUsername:'checkmark-circle',UsernameColor:'green',Username:text}):
-                                            this.setState({validUsername:'close-circle',UsernameColor:'red',Username:text})
-                                        }
+                                    onChangeText={username=>this.setState({dataUser:{...this.state.dataUser , username}})}
                                 />
-                                { <Icon name={this.state.validUsername} style={{color:this.state.UsernameColor}}/> }
+                                <Icon name={this.state.validUsername} style={{color:this.state.UsernameColor}}/>
                             </Item>
                             <Item last>
                                 <Icon name="lock" style={styles.icons}/>
@@ -63,16 +77,15 @@ export default class FormLogin extends Component{
                                     secureTextEntry
                                     onChangeText=
                                         {
-                                            (text)=>this.validatePassword(text)?
-                                            this.setState({validPass:'checkmark-circle',PassColor:'green',Password:text}):
-                                            this.setState({validPass:'close-circle',PassColor:'red',Email:text})
+                                            password=>this.setState({dataUser:{...this.state.dataUser, password}})
                                         }
                                     ref={(input)=>this.passwordInput = input}
                                     />
-                                {<Icon name={this.state.validPass} style={{color:this.state.PassColor}}/>}
+                                <Icon name={this.state.validPass} style={{color:this.state.PassColor}}/>
                             </Item>
-                            <Button full style={styles.btnLogin} onPress={()=>this.props.navigation.navigate('RouteHome')}><Text style={{color:'#fff'}}>Login</Text></Button>
-                            <Button transparent full onPress={()=>this.props.navigation.navigate('RouteSignUp')}><Text>Dont account? Register</Text></Button>
+                            <Button full style={styles.btnLogin} onPress={()=>this.handeLogin()}><Text style={{color:'#fff'}}>Login CS</Text></Button>
+                            <Button full style={styles.btnLogin} onPress={()=>this.props.navigation.navigate('FieldHome')}><Text style={{color:'#fff'}}>Login Lap</Text></Button>
+                            <Button transparent full onPress={()=>this.props.navigation.navigate('SignUp')}><Text>Dont account? Register</Text></Button>
                         </Form>   
                     </KeyboardAvoidingView>
                 </Content>

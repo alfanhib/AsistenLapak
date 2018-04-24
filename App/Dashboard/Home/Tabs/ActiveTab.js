@@ -45,7 +45,7 @@ export default class ActiveTab extends Component{
                         )
                     })}
                 </Content>
-                <Fab onPress={() => alert('fabpressed')}>
+                <Fab onPress={() => alert('fabpressed')} style={{backgroundColor:'#b4424b'}}>
                     <Icon name="add" />
                 </Fab>
             </Container>

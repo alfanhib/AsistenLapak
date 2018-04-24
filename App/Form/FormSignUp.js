@@ -7,15 +7,15 @@ export default class FormSignUp extends Component{
 
     state ={
         Username:'',
-        validUsername:'',
+        validUsername:null,
         UsernameColor:'red',
 
         Email:'',
-        validEmail:'',
+        validEmail:null,
         EmailColor:'red',
 
         Password:'',
-        validPass:'',
+        validPass:null,
         PassColor:'red',
     }
 
